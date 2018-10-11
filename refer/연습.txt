@@ -1,0 +1,7 @@
+public function home(){
+	return $this->render('blog/home.html.twig,[
+	'title' => "Jungmin c'est bien!",
+	'age'=> 27]);
+}
+
+여기 class 'Blog'이 아니고 이름을 썻따. index.html.twig에 <a href ="{{path(Blog_home)}}"

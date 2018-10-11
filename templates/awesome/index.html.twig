@@ -1,0 +1,117 @@
+{% extends 'base.html.twig' %}
+
+
+{%  block body %}
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<div ng-app="leeApp">
+{% verbatim %}
+
+<div class="form-group " ng-controller="amischerchController" >
+
+<div class="navbar navbar-default">
+
+<div class="form-group has-feedback">
+<span class="fa fa-search form-control-feedback">CHERCHE:</span>
+
+
+<br /><br />
+<input id="search" class="form-control" type="text" placeholder="Cherche amis" ng-model="searchText" />
+
+</div>
+</div>
+
+
+
+  <hr>
+  <li  ng-repeat= "ami in amis | filter: searchText">
+  <p>Prenom: [[ami.username]]</p>
+
+  <p>Son email: [[ami.email]]</p>
+
+  <hr>
+  </li>
+
+  </div>
+
+{% endverbatim %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% block javascripts %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+
+
+var leeApp = angular.module('leeApp', ['ngRoute']);
+
+
+leeApp.
+  config([ '$routeProvider','$interpolateProvider', function($routeProvider, $interpolateProvider) {
+  $interpolateProvider.startSymbol('[[');
+  $interpolateProvider.endSymbol(']]');
+}])
+
+
+.controller('amischerchController',['$scope', '$http', function($scope, $http, $location){
+
+  $scope.amis=[];
+
+  $http.get("http://localhost:7000/api/users")
+  .then(function (response)
+    { console.log(response.data);
+      $scope.amis = response.data;},
+    function onError(reponse)
+    { console.log("essayer jungmin encore");
+
+    });
+
+
+
+  }]);
+
+
+
+
+
+    </script>
+{% endblock %}
+</div>
+{% endblock %}

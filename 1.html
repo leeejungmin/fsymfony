@@ -1,0 +1,27 @@
+
+<div class="form-group " ng-controller="amischerchController" >
+
+Search : <input id="search" class="fa fa-search" type="text" placeholder="Cherche amis" ng-model="searchText" />
+<i class="fa fa-search"></i>
+
+
+
+<i class="fa fa-search"></i>
+
+
+
+  <br /> <br />
+
+  <hr>
+  <li  ng-repeat= "ami in amis | filter: searchText">
+  <p>Prenom: [[ami.username]]</p>
+
+  <p>Son email: [[ami.email]]</p>
+
+  <hr>
+  </li>
+
+
+{% endverbatim %}
+
+</div>

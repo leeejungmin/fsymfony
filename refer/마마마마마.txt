@@ -1,0 +1,58 @@
+  /**
+     * @Route("/article", name="article")
+     * @Route("/article/commentregister/{id}", name="commentregister")
+     */
+    public function showarticle(Article $article=null,Comment $comment, Request $request, ObjectManager $manager ){
+
+      if(!$article){
+
+        $article = new Article();
+      }
+
+      $form = $this->createForm(ArticleRegisterType::class, $article);
+
+      $form->handleRequest($request);
+
+          $repo = $this->getDoctrine()->getRepository(Article::class);
+
+          $articles = $repo->findAll();
+
+
+          $user = $this->getUser();
+
+          // pour faire form
+          // if(!$comment){
+          //
+          //   $comment = new Comment();
+          // }
+
+
+          $comment = $comment->setArticle($article);
+
+
+          $form = $this->createForm(CommentRegisterType::class, $comment);
+
+          $form->handleRequest($request);
+
+
+
+          if($form->isSubmitted() && $form->isValid()){
+
+            $manager->persist($comment);
+            $manager->flush();
+
+            return $this->redirectToRoute('article');
+          }
+
+        return $this->render('article/article.html.twig', [
+
+
+            'articles' => $articles,
+
+            'user' => $user,
+
+            'form' => $form->createView(),
+
+
+        ]);
+    }

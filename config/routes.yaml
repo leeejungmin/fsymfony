@@ -1,0 +1,23 @@
+# fos_user:
+#   resource: "@FOSUserBundle/Resources/config/routing/all.xml"
+
+#index:
+#    path: /
+#    controller: App\Controller\DefaultController::index
+# engel_awesome_page:
+#   path:  /page/{page}
+#   default:{_controller:ENGELAwesomeBundle:Awesome:page}
+
+# foobar_bundle_users_get:
+#   pattern: /api/users
+#   defaults: {_controller: FooBarBundle:Main:getUsers}
+#   requirements:
+#     _format: json
+#     methods: GET
+#
+# foobar_bundle_users_get:
+#   pattern: /api/user
+#   defaults: {_controller: FooBarBundle:Main:setUser}
+#   requirements:
+#     _format: json
+#     methods: POST

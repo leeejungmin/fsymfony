@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %}Hello {{ controller_name }}!{% endblock %}
+
+{% block body %}
+
+<section id="commentaires">
+    <form action="{{path('addamiss')}}" method="post">
+
+      <div class="form-group">
+        <input placeholder="email"  name="email"
+        type="text" class="form-control">
+      </div>
+
+      <div class="form-group">
+        <button type="submit" class="btn btn-success">addAmis</button>
+        </div>
+  </form>
+</section>
+
+<br>
+ <button type"submit" class="btn btn-default" onclick="window.location.href='/amis/recommand'">Recommandation</button>
+
+
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Registartion{% endblock %}
+
+
+{% block body %}
+<form action="{{path('security_login')}}" method="post">
+  {% if error %}
+     <div class="alert alert-danger">
+         {{ error.messageKey|trans(error.messageData) }}
+     </div>
+  {% endif %}
+  <div class="form-group">
+    <input placeholder="votre email" required name="_username"
+    type="text" class="form-control">
+    </div>
+  <div class="form-group">
+    <input placeholder="Mote de passe" required name="_password"
+    type="password" class="form-control">
+    </div>
+  <div class="form-group">
+    <button type="submit" class="btn btn-success">Connexion</button>
+    </div>
+  </form>
+{% endblock %}

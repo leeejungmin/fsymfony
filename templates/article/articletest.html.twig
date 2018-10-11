@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+
+
+
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+
+    <hr>
+
+    <article>
+
+
+    <div class="content">
+
+    {% for art in articles %}
+      <img src={{art.nourriture}} alt="ll" height="350" width="700">
+
+      <p> Nationalité est {{art.race}} </p>
+      <p> Famille est {{art.famille}} </p>
+      <p> Mon age est {{art.age}} </p>
+
+      {% if  user %}
+        {% if  art.User == user %}
+
+        <button type"submit" class="btn btn-danger" onclick="window.location.href='/articledelete/{{art.id}}'">Delete</button>
+        <button type"submit" class="btn btn-default" onclick="window.location.href='/articleedit/{{art.id}}'">Edit</button>
+
+        {% endif%}
+
+      {% endif%}
+
+      <hr>
+    <section id="commentaires">
+      {% for comment in art.comments %}
+        <div class="row">
+          <div class="col-3">
+            {{comment.author}}
+          </div>
+          <div class="col">
+              {{comment.content | raw}}
+          </div>
+        </div>
+        <hr>
+      {% endfor %}
+
+      <hr>
+
+
+    <section id="commentaires">
+        <form action="{{path('treattest', { 'id': art.id })}}" method="post">
+          <div class="form-group">
+            <input placeholder="author"  name="author"
+            type="text" class="form-control">
+          </div>
+          <div class="form-group">
+            <input placeholder="content"  name="content"
+            type="text" class="form-control">
+            </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-success">addcommentaire</button>
+            </div>
+      </form>
+    </section>
+
+
+      <hr>
+    {% endfor %}
+
+
+
+    </div>
+    </article>
+{% endblock %}

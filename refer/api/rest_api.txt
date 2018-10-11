@@ -1,0 +1,6 @@
+http://www.codeforcodes.com/rest-api-using-symfony-4/
+
+composer req api
+composer req server
+
+https://www.youtube.com/watch?v=o9N1nOYfAl4

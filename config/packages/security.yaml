@@ -1,0 +1,50 @@
+security:
+    encoders:
+        App\Entity\User:
+            algorithm: bcrypt
+
+
+    providers:
+      in_memory: { memory: ~ }
+      in_database:
+            entity:
+              class: App\Entity\User
+              property: email
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            anonymous: True
+            provider: in_database
+            form_login:
+              login_path: security_login
+              check_path: security_login
+
+            logout:
+              path: security_logout
+              target: main
+
+
+
+
+
+    #pour creer admin
+    # security:
+        # providers:
+        #   in_memory:
+        #     memory:
+        #       users:
+        #         damin:
+        #           password: kitten
+        #           roles: 'ROLE_ADMIN'
+    #
+    #   firewall:
+    #     main:
+    #   access_control:
+    #     -{ path: ^/admin/users, roles :ROLE_SUPER_ADMIN}
+    #     -{ path: ^/admin, roles :ROLE_ADMIN}
+    access_control:
+        # - { path: ^/admin, roles: ROLE_ADMIN }
+        # - { path: ^/profile, roles: ROLE_USER }

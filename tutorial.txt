@@ -1,0 +1,190 @@
+composer create-project symfony/skeleton my_project
+
+composer create-project symfony/website-skeleton my_project(이름)
+
+php bin/console server:start
+
+php bin/console debug:router
+
+
+template에서 html파일 만든다
+
+php bin/console make:controller(쉽게 만들수 있다.)
+
+composer require annotations(yaml에서 경로 지정안해줘도 된다.)
+
+php bin/console make:entity(database)
+
+php bin/console make:form
+
+php bin/console make:migration
+
+php bin/console doctrine:migrations:migrate
+
+php -S 127.0.0.1:8000 -t public
+<link rel="sytlesheet" href="{{asset('css/mystyle.css')}}"/>
+
+
+https://stackoverflow.com/questions/44286530/symfony-3-2-a-circular-reference-has-been-detected-configured-limit-1
+
+
+C'EST le site pour designer/////////////////////////////////////////////////////////
+getbootstrap 
+bootstrapcdn
+bootswatch.com
+materializecss.com/forms.html
+path{{'information'}}
+id="search-input"
+class="zs_clear"
+fors_user:
+	db_driver: orm
+	firewall_name:main
+	user_class: App\Entity\User
+	from_email:
+		address: "ljm3453@gmail.com"
+		sender_name: "jungmin"
+
+
+
+
+
+
+
+
+
+내가 해냈다 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  /**
+     * @Route("/amis/{id}/add", name="addamis")
+     * @Route("/amis/{id}/add/edit", name="addamis_edit")
+     */
+    public function Addamis($id, Amis $amis = null,Person $persons = null, Request $request, objectManager $manager)
+    {
+      if(!$amis){
+
+        $amis = new Amis();
+      }
+
+      if(!$persons){
+
+        $persons= new Person();
+      }
+      $persons = $this->getDoctrine()
+                      ->getRepository(Person::class)
+                      ->find($id);
+     
+     $amis = $amis->addAmisid($persons);
+
+
+       $form = $this->createFormBuilder($amis)
+
+                   ->add('prenom', TextType::class,['attr' => [
+                               'placeholder' => "Notez le nom de votre ami",
+
+                               ] ])
+                   ->add('Age',TextType::class,['attr' => [
+                               'placeholder' => "Notez l'age de votre ami.",
+
+                               ] ])
+                   ->add('location',TextType::class,['attr' => [
+                               'placeholder' => "Notez le location de votre ami.",
+
+                               ] ])
+
+                  ->getForm();
+
+
+                    $form->handleRequest($request);
+
+                    dump($amis);
+
+                    if($form->isSubmitted() && $form->isValid()){
+                      $manager->persist($amis);
+                      $manager->flush();
+
+                      return $this->redirectToRoute('amis',['id' => $persons->getId()]);
+
+                    };
+
+            return $this->render('inscription/amisadd.html.twig', [
+            'controller_name' => 'Jungmin',
+            'form' => $form->createView(),
+            ]);
+
+    }
+
+
+
+$formation=($person->getid(),$amis->getid())
+$manager->persit($foramtion)
+
+
+
+/////////////////////
+
+http://localhost:8000/commentregister/18
+https://stackoverflow.com/questions/28710085/symfony2-catchable-fatal-error-object-of-class-could-not-be-converted-to-string
+----------------------------------------------------------------------------------------
+<button type"submit" class="btn btn-default" onclick="window.location.href='/amischerche/'">CHERCHE</button>
+
+https://afsy.fr/avent/2013/16-symfony-et-angularjs-tips
+<a href="../amischerche/amischerche.html" class="w3-bar-item w3-button">Cherch</a>
+
+{% verbatim %}
+    <ul>
+    {% for item in seq %}
+        <li>{{ item }}</li>
+    {% endfor %}
+    </ul>
+{% endverbatim %}
+
+---------------------------------------------------------------
+
+
+
+
+<div class="form-group hasTypeahead">
+Search:   <input id="search-input" name="searchQuery" ng-model="searchText" data-placeholdersm="Search support" data-placeholderlg="Cherche amis" aria-label="Cherche amis" errorposition="br" placeholder="Cherche tes amis!" errorexceptionevent="blur" data-typeaheadlimit="50" class="form-input reqTypeAhead placeholderText search-input desktopSearch" requiredvalidation="true" errorcontainer="help-block" type="text" data-predectivecontainer="search-predictive-results-hero" ghosttext="Cherche tes amis!" errormessage="Please enter your product number, a question or keywords" value="" autocomplete="off" style="padding-left: 245px;">
+<input type="hidden" class="typeaheadHook" value="245">
+<a id="clear-search" class="icon-x" style="display:none;" href="javascript:void(0)" aria-label="Clear search text"></a>
+<div class="searching" style="display: none;">
+<img class="" src="/static/hp-portal-theme-static/themes/Portal8.0/hp/images/loadingHp.gif" alt="Loading">
+</div>
+
+https://symfony.com/doc/current/frontend/encore/page-specific-assets.html
+
+----------------------------
+problem route
+
+https://www.youtube.com/watch?v=L-hYd2DObTA&t=93s
+
+-----------------------------------------------------------
+
+  Search : <input id="search" class="fa fa-search" type="text" placeholder="Cherche amis" ng-model="searchText" />
+<i class="fa fa-search"></i>
+
+-------------------------
+JE  FAIRE CA TOUT CE QUI EST GRACE A MON SEINGEUR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!JUNGMIN!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+--------------------------------
+
+
+  /**
+       * Create Article.
+       * @FOSRest\Post("/article")
+       *
+       * @return array
+       */
+      public function postArticleAction(Request $request)
+      {
+          $article = new Article();
+          $article->setRace($request->get('race'));
+          $article->setFamille($request->get('famille'));
+          $article->setAge($request->get('age'));
+          $article->setNourriture($request->get('nourriture'));
+          $em = $this->getDoctrine()->getManager();
+          $em->persist($article);
+          $em->flush();
+          return View::create($article, Response::HTTP_CREATED , []);
+
+      }

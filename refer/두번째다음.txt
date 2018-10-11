@@ -1,0 +1,131 @@
+php make:entity
+
+category
+
+relation (field type)??
+
+article(entity related to class)
+
+one to many
+
+null : no
+
+---------------------------
+category.php에 
+
+private title
+'' 	$description
+''	$articles
+
+function __construct()
+{
+$this->articles = new ArrayCollection();
+}
+
+public function getId()
+{
+ return $this->id;
+}
+getTitle():
+{
+return $this->id;
+}
+
+addarticle(artcle $article)
+deletearticle등이 자동으로 만들어져있다.
+
+----------------------------
+php make:migration
+php doctrine:migration:migrate
+-----------------------------------
+
+php make:entity
+
+comment[이걸로 comment와 category를 만들었다.]
+
+-------------------
+comment.php안에도
+
+private $article이 선언 many to one
+
+migration,과 doctrine실행
+
+------------------------
+faker만들기
+composer require --dev doctrine/doctrine-fixtures-bundle
+만든다음
+composer require fzaninotto/faker --dev??? 이거라고?
+php faker에들어가서 github써다....[데이터를 위해서 그전에 있는 데이터지우고]
+----------------------------
+articleFixture.php에서
+
+use app\entity\article,category,comment추가
+
+$faker = \Faker\Factory::create('fr_FR');
+for($i = 1 ;$i <= 3; $i ++ ){
+	$category = new Category();
+	
+	$category ->setTitle($faker->sentence());
+		->setDescription($faker->paragrah());
+
+	$manager->persitt($category)
+	}
+	//creer enter 4 et 6 article
+	
+	$content = '<p>' . joint($faker->paragraph(5), '</p><p>') . '</p>';
+	
+	for($j = 1;$j <= mt_rand(4,6); $j ++){
+	$article = new Article();
+	$article ->setTitle($faker->sentence())
+		->setcontent($content)
+		->setImage($faker->url())
+		->setCreateAt($faker->dateTimeBetween('-6 months'));
+		->setCategory($category)[위에 꺼를 다시 쓰겠다는거?]
+
+	$manager->persist($article)
+	
+	//on donne des commentaire a l'article
+	
+	for($k = 1; $k <= mt_rand(4,10 ); $k++){
+		$comment = new Comment();
+
+		$content = '<p>' . joint($faker->paragraph(5), '</p><p>') . '</p>';
+
+		
+		$fcomment->setAuthor($faker->name)
+			->setContent($content)
+
+		$day와 $now 차이를 내서 시간구하는건 동영상 참고
+	}
+}
+
+------------------------
+
+php doctrine :fixture:load 이러면 업로드됨
+
+------------------
+
+show.html에서
+{{article.category.title}}
+{% for comment in article.comments %}
+{{comment.author}}(<small>{{comment.createdAt | date('d/m/y a H:i')}}</small>)
+
+	{{comment.content| raw}}
+
+{% endfor %}
+
+--------------------
+articletype.php에 가서
+
+add('category', EntityType::class, [
+	'class' => Category:class,???? pourqoui? category의 entity를 쓰기위해
+	'class_label' => 'title'
+])
+----------------
+
+create html 에가서
+
+{{form_row(formArticle.category)}}추가한다.
+
+목록만들어 지는것을 볼수 있따.
+

@@ -1,0 +1,123 @@
+ php bin/console doctrine:database make:entity
+
+ php bin/console make:migration
+
+ php bin/console doctrine:migrations:migrate
+
+commentaire??===(blog의 테이블 comment으로 만들어짐)
+author
+content
+createAt
+
+manytoone(많은 commentiare lie a une article)
+
+composer require --dev doctrine/doctrine-fixtures-bundle[페이커만들기]
+
+ php bin/console doctrine:fixtures:load
+
+
+use App\Entity\category;
+
+
+(articleFixture.php에서)
+public function load(ObjectManager $manager){
+	$faker = Faker\Factory::create('FR_fr');
+
+// creer 3 categories fakees
+for($i =1; $i <=3; $i++){
+ $category = new Category();
+ $category ->setTitle($faker->sentence())
+	  ->setDescription($faker->paragraph());
+
+	$manager->persist($category);
+
+	//Creer entre 4 et 6 articles
+
+i에서 j 로 바꿌다.
+	for($j = 1; $j <= mt_rand(4,6); $j++){
+	$article = new Article();
+
+	$content = '<p>' . join($faker->paragraphs(5), '</p><p>') 	.</p>;
+	//$content .= '</p>';
+	
+	$article->setTitle("$faker->sentence())
+	 	->setContent("<p>content is that $i</p>")	
+		->setImage($faker->imageUrl())//"http://"
+		
+		->setCreatedAt(new \Datetime())
+		//($faker-	>dateTimeBetween('-6 months'))
+		->setCategory($category); pourqoui???
+			
+	$manager->persist($article);
+	// on donne des commentaires a l'article
+	for($k =1; $k <= mt_rand(4,10); $k++){
+	    $comment= new Comment();
+	    $content = '<p>' . join($faker->paragraphs(5), '</p><p>') 	  	.</p>;
+	    $now = new \DateTime();
+	    $interval = $now ->diff($article->getCreatedAt());
+	    $days = $interval->days;
+	    $minimum = '-' . $days . 'days';
+	    $comment->setAuthor($faker-> name)
+		      ->setContent($content)
+		      ->setCreatedAt($faker->dateTimeBetween			($minimum));
+	    $manager->persist($comment);	    
+}
+}	
+
+flush....
+
+show.html.twig
+
+<section id="commetaires">
+	{%for comment in article.comments %}
+	<div class ="comment">
+		<div class="row">
+			<div class="col-3">
+			{{comment.author}} (<small>{{comment.createdAt | date('d/m/Y a H:i')}}</small>)
+			</div>
+			<div class="col">
+				{{comment.content | raw}}
+			</div>
+		</div>
+	</div>
+	{% endfor %}
+
+
+
+
+---------------------------------
+articleType.php에
+use Syfony\Component\OptionResolver\Type\EntityTyper;
+use App\Entity\category;
+(dans entitydocument)
+$builder
+	->add('title')
+	->add('category', EntityType::class, [
+	'class'=> Category::class,
+	'choice_label' => 'username',
+])[이것만 추가했다.]
+	->add('content')
+	->add('image')
+
+그다음 순서를 위해서 
+
+create.html.twig에 가서
+
+{{ form_row(formArticle.category)}}
+
+
+
+
+
+  /**
+     * @Route("/", name="mainpage")
+     */
+    public function index(){
+
+          $user = $this->getUser();
+
+        return $this->render('security/base.html.twig',[
+
+          'user' => $user,
+        ]);
+    }

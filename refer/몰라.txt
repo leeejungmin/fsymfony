@@ -1,0 +1,40 @@
+  if(!$comment){
+
+        $comment= new Comment();
+      } 
+
+
+ $entityManager = $this->getDoctrine()->getManager();
+        $repo = $entityManager->getRepository(Article::class);
+
+        $article = $repo->find($id);
+
+        $user = $this->getUser();
+
+        $comment = $comment->setArticle($article);       $entityManager->persist($comment);
+         $entityManager->flush();
+
+
+
+
+
+ $comment = $comment->setArticle($article);
+
+
+  return $this->redirectToRoute('article');
+
+----------------------------------------------------------------------------------
+
+<form action="{{path('security_login')}}" method="post">
+  <div class="form-group">
+    <input placeholder="votre email" required name="_username"
+    type="text" class="form-control">
+    </div>
+  <div class="form-group">
+    <input placeholder="Mote de passe" required name="_password"
+    type="password" class="form-control">
+    </div>
+  <div class="form-group">
+    <button type="submit" class="btn btn-success">Connexion</button>
+    </div>
+  </form>

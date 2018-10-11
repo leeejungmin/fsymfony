@@ -1,0 +1,23 @@
+https://www.youtube.com/watch?v=Q-BpqyOT3a8 [nom de site]
+http://blog.jeonghwan.net/lectures/todomvc-angular/12/[""]
+https://afsy.fr/avent/2013/16-symfony-et-angularjs-tips["francais"]
+https://www.baeldung.com/angular-js-rest-api[angularjs]
+https://www.a-mean-blog.com/ko/blog/Node-JS-API/_/%EA%B8%B0%EB%B3%B8-REST-API-%EB%A7%8C%EB%93%A4%EA%B8%B0[site coreen]
+https://www.youtube.com/watch?v=F5pXxS0y4bg
+http://blog.jeonghwan.net/resource%EB%A1%9C-rest-api-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0/['corean angular']
+
+http://api.github.com/users/leeejungmin [post man]
+
+-----------------------------------------------
+https://github.com/settings/applications/new[git hub]
+https://developer.github.com/v3/[ aller ici ]
+
+
+http://api.github.com/users/leeejungmin?client_id=c9ba929b54e6863d515b&client_secret=17a14db96ba743f035748e67c32daae6b601035a'
+
+------------------------------------------------
+http://www.flicker.com/services/api/[le site api]
+apigee.com/console/twitter/[le site api ] ���� ...
+
+---------------------------------------------------
+json.parser.online.fr[json parser]

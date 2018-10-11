@@ -1,0 +1,300 @@
+
+authentification
+
+php bin/console make:entity User
+email, username, password ,confirm_password
+make :migration
+
+ php bin/console make:form RegistrationType(le nom de folder c'est pas ca.... il y a )
+
+여기는 resgistrationtype.php
+
+	class registerationType
+	public function builForm($buider,$option)
+	(
+		$builder
+			->add('email')
+			->add('username')
+			//->add('password')[여기서 더한다]
+			->add('password, PasswordType::class')
+[단축키 alt+ctrl+i ]
+use symfony\component\'''''''\core\type\passwordType;
+		->add('confirm_password',PasswordType::class')
+(registration php만들고 , class user??  그안에 function getid가 자동으로만들어져있네??)
+
+------------------------------------------
+
+user.php에 (peut etre ici il  y a base de donnee)
+private $confirm_password; 
+
+bin/console make:controlloer
+
+securityController(securityconroller.php, index.html,twig가 만들어짐)
+
+use App\Entity\User;
+use App\Form\registerType;
+
+--------------------------------------
+Securitycontroller.php 파일안 ...
+class SucurityController extends Controller
+{
+	/**
+	* @rout("/inscription", name="security_registration")
+	//public function registeration(){
+	  public function registeration(Request $request, ObjectManager $manager)
+[faut metter module avec objectmanager]
+		$user = new User();
+	
+		$form = $this->createForm(RegistrationType::class, 		$user);
+
+		return $this->render('security/registration.html.twig',[			'form' => $form->createView()
+		
+		[이거는  위에 request,objectmanager 추가한뒤 넣엇음 mysql넣기위한작업]if($form->isSubmitted() && $form->isValid()){		
+			$manager->persist($user)
+			$manager->flush();
+		]);
+			//RegistrationType.php파일있는데 c'estca?
+		security폴더안에 registration.html파일을 만듬
+
+
+}
+}
+
+
+registration.html.twig안
+{% extend 'base.html.twig' %}
+{% block body%}
+	<h1>
+	{{form_start(form)}}
+	///이거 대신해서 밑에꺼 선언{{form_widget(form)}}
+	{{form-row(form.username, {'label': 'Nom d\'utilisateur','attr': {'placeholder': 'Adresse email...'}})}}  \\ (\' 은 'pour l'utiliser)
+	{{form-row(form.email)}}
+	{{form-row(form.password)}}
+	{{form-row(form.confirm_password)}}
+
+	button:submit.btn.btn-success--> <button type="submit" class="btn btn--">inscirption</button> 명령어다
+	{{form_end(form)}}
+{%endblock%}
+
+	이쁜 창화면이 만들어짐
+
+
+그다음 RegistrationType 에 작업을 하고
+Securitycontroller.php 에 request, objectmanager하고 (수정순서대로 보면됨)
+
+user ,php에 use Symfony\componet\constraints as Assert; 추가
+
+user.php에 private $username; private $passowrd; $confirm_password;가 있네?? 여기서 assert 로 조건을 만들어준다.
+
+/**
+*@ORM\Column(type="string", length=255)
+*@Assert\Length(min="8", minmessage="Votre mot de passe doit faire..")
+*@Assert\EquelId(propertyPath="confirm_password" message="votre mot est different...")\\이거는 contraint에서 찾았음 document
+private $password;
+
+----------------------------
+
+hash??
+
+sercurity:yaml에가서
+
+security:
+ encoders:
+  app\entity\user:
+	algorithm: bcrypt
+
+
+-------------
+sercuritycotroller.php에가서
+
+public function registration(request $request,.... ,userpasswordEncoderinterface $encoder을 추가한다) 물론 모듈추가
+
+if($form-> issubmitt()여기에)
+	$hash = $encoder->encodePassword($user, $user->getPassword());을 추가
+	$user->setPassword($hash);
+
+---------------------
+user.php에가서
+
+class user implements userinterface(을 추가해준다) 모듈추가
+
+public function eraseCredential(){}
+
+public function getSalt(){}
+
+public function getRoles(){
+	return ['ROLE_USER'];
+
+------------------------
+user.php
+/**
+*@ORM\ENTITY(repositoryClss="App\Repository\UserRepository")
+*@UniqueEntity( 조건을 추가 할수 있는것  assert랑 같다.
+	fields={"email"}, (이거는 $email을 뜻??)
+	message= "L'email que vous aves indique est deja")[모듈추가]
+
+class user implements Userinterface위에 
+그다음
+
+*@Assert\Email() [deja cree par module]
+private $email;
+
+---------------------------------------
+securitycontroller.php에가서
+
+/*
+** @Route("/connexion", name="securtiy_login")	
+public function login(){
+ 	return $this->render('security/login.html.twig');
+}
+
+그다음  $manager->persist($user);
+	$manager->flush();
+밑에 
+ 	return $this->redirectToRoute('security_login');
+
+login.html.twig만들어준다
+
+-----------------------------------
+
+security.yaml에
+
+providers:
+	in_memory: { memory: ~}
+	in_database:
+		entity:
+			class: App\Entity\User
+			property: email
+
+firewalls:
+	main:
+		provider: in_database
+		form_login:
+			login_path: security_login
+			check_path: security_login
+---------------
+login.html.twig에가서
+
+{% block body %}
+	<form actioin="{{ path('security_login')}}" method="post">
+		<div class="form-group">
+			<input placeholder="adress email" required name="_username" type="text" class="form-control">
+		</div>
+	
+		<div class="form-group">
+			<input placeholder="password" required name="_password" type="password" class="form-control">
+		</div>
+
+	<div class="form-group">
+		<button type="submit" class="btn btn-success">
+		Connexion </button>
+	</div>
+
+
+이것은 security.yaml의 firewall과 반응한다.
+login_path: security_login	check_path: security_login
+
+-------------------------------------------
+
+sucuritycontroller.php
+
+/**
+*@Route("/deconnextion", name="security_logout")
+*/
+
+
+public function logout(){
+}
+----------------------------------------------
+그다음 security .yaml에가서
+
+	logout:
+		path: security_logout
+		target: blog[controller에 blogcontrooler.php에 
+class blogcontroller extends controller 의 
+public function index(ArticleRepository $repo)이름이name= blog
+
+{	$articles = $repo->findAll();
+	return $this->('blog/index.html.twig',[
+	'articles'=> $articles]);
+}]
+
+-----------------------------------------------
+base.html.twig에가서[위에 메뉴 만드는것]
+{% if not app.user%}
+<li class="nav-item">
+	<a href="{{path('security_login')}}" class="nav-link">
+		connexion
+	</a>
+</li>
+{% else %}
+<li class="nav-item">
+	<a href="{{path('security_logout')}}" class="nav-link">
+		deconnexion
+	</a>
+</li>
+{% endif%}
+----------------------------------------------------
+php bin/console make:form
+commentType(class)
+comment(entity)
+---------------------------------
+commenttype.php에가서
+->add('author')
+->add('content')빼고 다제거
+---------------------------------
+blogcontroller.php에가서
+
+public function show(Article $article,- Request $request, -objectManager $manager){
+-는 새로 추가한것 순서 바뀜
+	-$comment = new Comment();
+	-$form = $this ->createForm(CommentType::class, $comment);
+	-$form->handleRequest($request);
+
+	-if($form-> issubmitted() && $form->isValid()){
+	-$comment->setCreatAt(new \Datetime())
+	-	  ->setArticle($article);
+	-$manager-> persist($comment);
+	-$manager-> flush();
+
+	-return $this->redirectToRout('blog_show', ['id'] => $article->getId())
+	}
+	return $this->render('blog/show.html.twig',[
+	'article' => $article	,
+	'commentForm' => $form->createView()
+]);
+}
+
+-----------------
+show html twig에가서 위에 갓다가 show html twig에가서
+
+<section id="commentair">밑에
+<h1>{{article.comments | length}} commentaire : </h1> 추가
+-{% if app.user%}
+{{form_start(commentForm)}}
+{{form_row(commentForm.author, {'attr': {'placeholer' : "votre author"}})}}
+{{form_row(commentForm.content, {'attr': {'placeholer' : "votre author"}})}}
+
+<button type="submit" class="btn btn-success">commeter</button>
+{form_end(commentForm)}}
+-{%else%}
+<h2>Vous ne pouvez pas commenter si vous n'etes pas connecte<h2>
+<a href="{{path('security-_login')}} class="btn btn-primary">
+connexion
+</a>
+-{% endif%}
+---------
+
+
+마지막 코낵 디코낵 조건
+  <a class="p-2 text-dark" href="#">Amis</a>
+        <a class="p-2 text-dark" href="#">MyInformation</a>
+        {% if not app.user %}
+        <a class="p-2 text-dark" href="{{path('security_login')}}">Connexion</a>
+        {% else %}
+        <a class="p-2 text-dark" href="{{path('security_logout')}}">Deconnexion</a>
+      </nav>
+        {% endif %}
+        {% if not app.user %}
+      <a class="btn btn-outline-primary" href="#">Sign up</a>
+        {% endif %}

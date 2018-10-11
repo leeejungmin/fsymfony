@@ -1,0 +1,200 @@
+migrate한후
+
+BlogController.php에서
+
+public function index(-ArticleRepository $repo){
+
+	//$repo = $this->getDoctrine()->getRepository(Article::class);
+	위에 선언하면서 필요없어짐
+	//$article = $repo->findOn(12);
+	//$article = $repo->findOneByTitle('title....')
+	$articles = $repo->findAll();
+	
+	return %this->render('indexhtml', [
+	'articles' => $articles
+	])
+
+-----------------------------
+
+index html에
+
+{%for article in articles%}
+<h>{{article.title}}<h>
+<img src="{{article.image}}" alt="">
+<a href="{{path('blog_show')}}">
+{%endfor%}
+
+	public function show(Article $article //$id){
+	//$article = $repo->find($id)
+	article 선언하면서 필요 없어짐
+	return $this->render('show html', [
+	'article' => $article
+]);
+}
+
+
+---------------------------------------------
+blogcontroller php 에 가서  
+@route("/blog/new", name= "blog_create")
+public function create(Request $request, objectManager $manager)
+if($request ->request->count() >0){
+	$article = new Article();
+	//$article -> setTitle($request ->request-> get('title'));
+		->setContent
+		->setImage
+	//$manager->persist($article)
+	//$manager->flush();
+
+	//return $this->redirectToRoute('blog_show',['id' => $article->getId()])
+}
+
+이거를 form으로 변환
+
+public function create(Request $request, objectManager $manager){
+
+	$article = new Article();
+
+	$form = $this->createFormBuilder($article)
+			->add('title', TextareaType::class,[
+			'attr' => [
+			'placeholder' => "Titre...ak"
+			'class' => 'form-control'
+])
+			->add('content', TextType::class)
+			->getForm();
+	return this->render('create.html', [
+	'form' => $form->createView()
+]);
+
+--------------------
+
+create html에
+
+{{ form_start(formArticle)}}
+
+//<div class="form-group">
+	<label for="">Titre<label>
+//{{form(formArticle.title)}}
+//<div>
+{{ form_end(formArticle)}}
+
+
+---------------------
+
+twig.yaml에 추가한다
+
+ twig:
+ 	form_themes:['bootstrop_4_layout.html.twig']
+
+Bootstrap 4 Form Theme에서 document 참조
+---------------------------------
+
+create.html에 추가
+//{% form_theme form 'bootstrap_4_layout.html.twig' %}
+{% form_theme formArticle 'bootstrap_4_layout.html.twig' %}
+그럼 그냥 {{form_widget(formArticle)}}만 쓰면된다
+
+------------------------------------
+
+blogcontroller php에가서 
+
+->add('save', SubmitType::class,[
+	'label' => 'Enregisterer'
+])
+getForm();
+
+--------------------------------
+html 에가서 
+또는??? <button type="submit" class="btn btn-success">Ajourter<but>
+오버라이딩ㅇㄴ가?
+
+{{form_row(formArticle.content,{'attr': {'placeholder' : '아아아ㅏ'}}}}
+
+-----------------------------------
+blogController php에
+
+function create(request ,manager)
+
+article = new Article();
+
+$form = $this -> this -> createFormBuilder($article)
+	->add('title')
+	->add('content')
+	->add('image')
+	->getForm();
+$form->handleRequest($request);
+
+if($form->isSubmitted() && $form->isValid()){
+	-if(!$article->getId()){
+ 	$article->setCreateAt(new \DateTime());
+}
+	$manager->persist($article);
+	$manager->flush();
+
+	return $this->redirectToRoute('blog_show', ['id' = > $article ->getId()]);
+	
+--------------------------
+Blogcontroller.php에서 [위에랑 동일, 수정도 후에 수정한것도 있음]
+@Route("/blog/new", name="blog_create")
+-@Route("/blog/{id}/edit", name="blog_edit")
+
+function //create- form(-article article= null[이거는 $id 대신 쓴것이다] ,request , manager)
+if(!$article){
+$article =new Article();
+}
+$article -> setTitle("titre exmelte")
+	->setContent("c'est article");
+}
+return $this->render('create.html',[
+	'formArticle' => $form->createVew(),
+	'editeMode' => $article->getId() !==null
+])
+
+------------------
+create html
+
+<button type="submit" class="btn btn-success">
+	{% if editMode%}
+		enregister
+	{% else %}
+		ajouter article
+</button >
+
+-----------
+
+php make :form
+
+articleType
+
+ariticle[이말은 둘을 연관해서 쓴다는 것인가?]
+
+----------------
+articletype.php에가서
+->add title,content,image는 자동생성
+->add('creatAt')지움
+
+-----------------
+blogcontroller.php에가서
+
+function form()에 있는
+	$form = $this ->createFormBuilder($article)
+			->add('title')
+			->add('content')
+			->getForm()없앤다
+
+$form = $this->createForm(ArticleType::class, $article)
+
+--------------------------
+validation
+
+article.php에 가서
+assert 사용
+
+@Assert\Length(min=10, max=255, minMessage="~~~~~")
+private $title;
+
+  ->add('save', SubmitType::class,[
+                            'label' => 'Enregistrer'
+                    ])
+
+/// dump($persons); 하니까 정보를 볼수있네
