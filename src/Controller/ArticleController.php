@@ -43,36 +43,13 @@ class ArticleController extends FOSRestController
 {
 
 
-
-  // /**
-  //      * Lists all Articles.
-  //      * @FOSRest\Get("/api/articles")
-  //      *
-  //      * @return array
-  //      */
-  //     public function getArticleAction()
-  //     {
-  //         $repository = $this->getDoctrine()->getRepository(Article::class);
-  //
-  //         // query for a single Product by its primary key (usually "id")
-  //         $article = $repository->findall();
-  //         $routeOptions = [
-  //                'id' => $article[0]->getId(),
-  //                'famille' => $article[0]->getFamille(),
-  //                'age' => $article[0]->getAge(),
-  //
-  //              ];
-  //          return new ArrayCollection(json_encode($article));
-  //     }
-
-
   /**
        * Lists all Articles.
        * @FOSRest\Get("/api/articles")
        *
        * @return array
        */
-      public function getArticleAction()
+      public function getamisAction()
       {
           $repository = $this->getDoctrine()->getRepository(User::class);
 
@@ -82,90 +59,13 @@ class ArticleController extends FOSRestController
 
 
 
-          // $routeOptions = [
-          //        'id' => $article[0]->getId(),
-          //        'famille' => $article[0]->getFamille(),
-          //        'age' => $article[0]->getAge(),
-          //
-          //      ];
-
-          // $routeOptions = array(
-          //   1=>array('id'=>$article[0]->getId(),'famille'=>$article[0]->getFamille(),"age"=>$article[0]->getAge()),
-          //   2=>array('id'=>$article[1]->getId(),'famille'=>$article[1]->getFamille(),"age"=>$article[1]->getAge())
-          //
-          //   ) ;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-          // $serializer = $this->container->get('serializer');
-          // $reports = $serializer->serialize($article, 'json');
-          // return new Response($reports); // should be $reports as $doctrineobject is not serialized
-
-
 
 
           $serializer = SerializerBuilder::create()->build();
           $jsonObject = $serializer->serialize($article, 'json');
             return new Response($jsonObject);
 
-          // $em = $this->getDoctrine()->getEntityManager();
-          // $encoders = array(new XmlEncoder(), new JsonEncoder());
-          // $normalizers = array(new ObjectNormalizer());
-          // $policegroupe=$em->getRepository(User::class)->findOneBy(array('id' => 77));
-          // $serializer = new Serializer($normalizers, $encoders);
-          // // $normalizers->setCircularReferenceLimit(2);
-          // // $normalizers->setCircularReferenceHandler(function ($object) { return $object->getId(); });
-          //
-          // // $data = $request->get('data');
-          // // $pointventes = $policegroupe->getPointVente()
-          // $jsonContent = $serializer->serialize($policegroupe, 'json');
-          // return new JsonResponse( array($jsonContent) );
 
-
-
-
-
-
-            // $encoders = array( new JsonEncoder());
-            // $normalizer =array(new ObjectNormalizer()) ;
-            // $normalizer->setCircularReferenceHandler(function ($object) { return $object->getId(); });
-            // $serializer = new Serializer($normalizer, $encoders);
-            //
-            // $response = $serializer->serialize($article, 'json');
-            //
-            // $response = $normalizer->serialize($article, 'json');
-            //
-            //
-            // return $response;
-
-
-
-
-
-
-
-
-          // return new JsonResponse(json_encode($routeOptions));
-          // return new JsonResponse($jsonObject);
-          // $response = new Response(json_encode($article));
-          // $response->headers->set('Content-Type', 'application/json');
-          //
-          // return new JsonResponse( array('pointventes'=>$reponse) );
       }
 
 
